@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mass Combat Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2em auto;
+            padding: 1em;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 2em;
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        .input-group {
+            margin-bottom: 1em;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.5em;
+            font-size: 1em;
+        }
+
+        button {
+            padding: 0.7em 1.5em;
+            font-size: 1em;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .output {
+            margin-top: 1em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mass Combat Calculator</h1>
+    </header>
+    <div class="container">
+        <!-- Battalion Calculator -->
+        <div class="section" id="battalion-calculator">
+            <h2>Battalion Upkeep Calculator</h2>
+            <div class="input-group">
+                <label for="battalion-size">Select Battalion Size:</label>
+                <select id="battalion-size">
+                    <option value="1d4">Small (1d4)</option>
+                    <option value="1d6">Medium (1d6)</option>
+                    <option value="1d8">Large (1d8)</option>
+                    <option value="1d10">Huge (1d10)</option>
+                    <option value="1d12">Gargantuan (1d12)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="unit-cost">Cost per Unit (gp/year):</label>
+                <input type="number" id="unit-cost" value="30">
+            </div>
+            <div class="input-group">
+                <label for="num-units">Number of Units:</label>
+                <input type="number" id="num-units" value="50">
+            </div>
+            <button onclick="calculateBattalionUpkeep()">Calculate Upkeep</button>
+            <div class="output" id="battalion-output"></div>
+        </div>
+
+        <!-- Settlement Calculator -->
+        <div class="section" id="settlement-calculator">
+            <h2>Settlement Income Calculator</h2>
+            <div class="input-group">
+                <label for="settlement-population">Population:</label>
+                <input type="number" id="settlement-population" value="1000">
+            </div>
+            <div class="input-group">
+                <label for="tax-rate">Tax Rate (copper/year per citizen):</label>
+                <input type="number" id="tax-rate" value="364">
+            </div>
+            <button onclick="calculateSettlementIncome()">Calculate Income</button>
+            <div class="output" id="settlement-output"></div>
+        </div>
+    </div>
+    <script>
+        // Battalion Calculator Logic
+        function calculateBattalionUpkeep() {
+            const sizeDie = document.getElementById("battalion-size").value;
+            const unitCost = parseFloat(document.getElementById("unit-cost").value);
+            const numUnits = parseInt(document.getElementById("num-units").value, 10);
+
+            if (isNaN(unitCost) || isNaN(numUnits)) {
+                document.getElementById("battalion-output").textContent = "Please enter valid numbers.";
+                return;
+            }
+
+            const upkeep = unitCost * numUnits;
+            document.getElementById("battalion-output").textContent = `Annual Upkeep: ${upkeep} gp for a ${sizeDie} battalion.`;
+        }
+
+        // Settlement Calculator Logic
+        function calculateSettlementIncome() {
+            const population = parseInt(document.getElementById("settlement-population").value, 10);
+            const taxRate = parseFloat(document.getElementById("tax-rate").value);
+
+            if (isNaN(population) || isNaN(taxRate)) {
+                document.getElementById("settlement-output").textContent = "Please enter valid numbers.";
+                return;
+            }
+
+            const income = (population * taxRate) / 100;
+            document.getElementById("settlement-output").textContent = `Annual Taxed Income: ${income.toFixed(2)} gp.`;
+        }
+    </script>
+</body>
+</html>
