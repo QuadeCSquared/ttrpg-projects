@@ -81,21 +81,44 @@
             <h2>Battalion Upkeep Calculator</h2>
             <div class="input-group">
                 <label for="battalion-size">Select Battalion Size:</label>
-                <select id="battalion-size">
-                    <option value="1d4">Small (1d4)</option>
-                    <option value="1d6">Medium (1d6)</option>
-                    <option value="1d8">Large (1d8)</option>
-                    <option value="1d10">Huge (1d10)</option>
-                    <option value="1d12">Gargantuan (1d12)</option>
+                <select id="battalion-size" onchange="updateUnitCount()">
+                    <option value="1d4" data-units="25">Small (1d4, 25 units)</option>
+                    <option value="1d6" data-units="50">Medium (1d6, 50 units)</option>
+                    <option value="1d8" data-units="200">Large (1d8, 200 units)</option>
+                    <option value="1d10" data-units="450">Huge (1d10, 450 units)</option>
+                    <option value="1d12" data-units="800">Gargantuan (1d12, 800 units)</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="unit-cost">Cost per Unit (gp/year):</label>
-                <input type="number" id="unit-cost" value="30">
+                <label for="equipment">Select Equipment:</label>
+                <select id="equipment">
+                    <option value="0">Unarmed (-3 gp/unit)</option>
+                    <option value="0">Light (0 gp/unit)</option>
+                    <option value="5">Moderate (+5 gp/unit)</option>
+                    <option value="15">Heavy (+15 gp/unit)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="experience">Select Experience:</label>
+                <select id="experience">
+                    <option value="0">Green (0 gp/unit)</option>
+                    <option value="2">Trained (+2 gp/unit)</option>
+                    <option value="5">Seasoned (+5 gp/unit)</option>
+                    <option value="10">Veteran (+10 gp/unit)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="ancestry">Select Ancestry:</label>
+                <select id="ancestry">
+                    <option value="0">Mixed (0 gp/unit)</option>
+                    <option value="0">Human (0 gp/unit)</option>
+                    <option value="0">Elf (0 gp/unit)</option>
+                    <option value="5">Giant (+5 gp/unit)</option>
+                </select>
             </div>
             <div class="input-group">
                 <label for="num-units">Number of Units:</label>
-                <input type="number" id="num-units" value="50">
+                <input type="number" id="num-units" value="50" readonly>
             </div>
             <button onclick="calculateBattalionUpkeep()">Calculate Upkeep</button>
             <div class="output" id="battalion-output"></div>
@@ -117,18 +140,30 @@
         </div>
     </div>
     <script>
+        // Update the number of units based on battalion size selection
+        function updateUnitCount() {
+            const sizeSelect = document.getElementById("battalion-size");
+            const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+            const unitCount = selectedOption.getAttribute("data-units");
+            document.getElementById("num-units").value = unitCount;
+        }
+
         // Battalion Calculator Logic
         function calculateBattalionUpkeep() {
             const sizeDie = document.getElementById("battalion-size").value;
-            const unitCost = parseFloat(document.getElementById("unit-cost").value);
+            const unitCost = 30; // Base cost per unit
             const numUnits = parseInt(document.getElementById("num-units").value, 10);
+            const equipmentCost = parseInt(document.getElementById("equipment").value, 10);
+            const experienceCost = parseInt(document.getElementById("experience").value, 10);
+            const ancestryCost = parseInt(document.getElementById("ancestry").value, 10);
 
-            if (isNaN(unitCost) || isNaN(numUnits)) {
-                document.getElementById("battalion-output").textContent = "Please enter valid numbers.";
+            if (isNaN(numUnits) || isNaN(equipmentCost) || isNaN(experienceCost) || isNaN(ancestryCost)) {
+                document.getElementById("battalion-output").textContent = "Please enter valid inputs.";
                 return;
             }
 
-            const upkeep = unitCost * numUnits;
+            const totalCostPerUnit = unitCost + equipmentCost + experienceCost + ancestryCost;
+            const upkeep = totalCostPerUnit * numUnits;
             document.getElementById("battalion-output").textContent = `Annual Upkeep: ${upkeep} gp for a ${sizeDie} battalion.`;
         }
 
