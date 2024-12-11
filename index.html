@@ -1,5 +1,3 @@
-<!-- Updated version -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,9 +90,18 @@
                 </select>
             </div>
             <div class="input-group">
+                <label for="battalion-type">Select Battalion Type:</label>
+                <select id="battalion-type">
+                    <option value="30">Infantry (30 gp/unit)</option>
+                    <option value="45">Archers (45 gp/unit)</option>
+                    <option value="60">Cavalry (60 gp/unit)</option>
+                    <option value="90">Aerial (90 gp/unit)</option>
+                </select>
+            </div>
+            <div class="input-group">
                 <label for="equipment">Select Equipment:</label>
                 <select id="equipment">
-                    <option value="0">Unarmed (-3 gp/unit)</option>
+                    <option value="-3">Unarmed (-3 gp/unit)</option>
                     <option value="0">Light (0 gp/unit)</option>
                     <option value="5">Moderate (+5 gp/unit)</option>
                     <option value="15">Heavy (+15 gp/unit)</option>
@@ -117,10 +124,6 @@
                     <option value="0">Elf (0 gp/unit)</option>
                     <option value="5">Giant (+5 gp/unit)</option>
                 </select>
-            </div>
-            <div class="input-group">
-                <label for="num-units">Number of Units:</label>
-                <input type="number" id="num-units" value="50" readonly>
             </div>
             <button onclick="calculateBattalionUpkeep()">Calculate Upkeep</button>
             <div class="output" id="battalion-output"></div>
@@ -147,19 +150,19 @@
             const sizeSelect = document.getElementById("battalion-size");
             const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
             const unitCount = selectedOption.getAttribute("data-units");
-            document.getElementById("num-units").value = unitCount;
+            return parseInt(unitCount, 10);
         }
 
         // Battalion Calculator Logic
         function calculateBattalionUpkeep() {
             const sizeDie = document.getElementById("battalion-size").value;
-            const unitCost = 30; // Base cost per unit
-            const numUnits = parseInt(document.getElementById("num-units").value, 10);
+            const unitCost = parseInt(document.getElementById("battalion-type").value, 10); // Base cost from type
+            const numUnits = updateUnitCount();
             const equipmentCost = parseInt(document.getElementById("equipment").value, 10);
             const experienceCost = parseInt(document.getElementById("experience").value, 10);
             const ancestryCost = parseInt(document.getElementById("ancestry").value, 10);
 
-            if (isNaN(numUnits) || isNaN(equipmentCost) || isNaN(experienceCost) || isNaN(ancestryCost)) {
+            if (isNaN(numUnits) || isNaN(unitCost) || isNaN(equipmentCost) || isNaN(experienceCost) || isNaN(ancestryCost)) {
                 document.getElementById("battalion-output").textContent = "Please enter valid inputs.";
                 return;
             }
