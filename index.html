@@ -186,7 +186,7 @@
             const ancestryTactics = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-tactics"), 10);
             const ancestryToughness = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-toughness"), 10);
             const ancestryMorale = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-morale"), 10);
-            const ancestryTrait = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-trait"), 10);
+            const ancestryTrait = ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-trait");
 
             if (isNaN(numUnits) || isNaN(unitCost) || isNaN(equipmentCost) || isNaN(experienceCost)) {
                 document.getElementById("battalion-output").textContent = "Please enter valid inputs.";
