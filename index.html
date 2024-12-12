@@ -1,234 +1,65 @@
-<!updated code>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mass Combat Calculator</title>
+    <title>Mass Combat Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
         }
-
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1em 0;
+        .hero {
             text-align: center;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 2em auto;
-            padding: 1em;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .section {
-            margin-bottom: 2em;
-        }
-
-        .section h2 {
-            margin-top: 0;
-        }
-
-        .input-group {
-            margin-bottom: 1em;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5em;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 0.5em;
-            font-size: 1em;
-        }
-
-        button {
-            padding: 0.7em 1.5em;
-            font-size: 1em;
-            background: #007BFF;
+            padding: 50px 20px;
+            background-color: #007BFF;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
-
-        button:hover {
-            background: #0056b3;
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
         }
-
-        .output {
-            margin-top: 1em;
-            font-weight: bold;
-            white-space: pre-line;
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Mass Combat Calculator</h1>
-    </header>
-    <div class="container">
-        <!-- Battalion Calculator -->
-        <div class="section" id="battalion-calculator">
-            <h2>Battalion Upkeep Calculator</h2>
-            <div class="input-group">
-                <label for="battalion-size">Select Battalion Size:</label>
-                <select id="battalion-size" onchange="updateUnitCount()">
-                    <option value="1d4" data-units="25" data-bonus="4">Small (1d4, 25 units, +4 base bonus)</option>
-                    <option value="1d6" data-units="50" data-bonus="6">Medium (1d6, 50 units, +6 base bonus)</option>
-                    <option value="1d8" data-units="200" data-bonus="8">Large (1d8, 200 units, +8 base bonus)</option>
-                    <option value="1d10" data-units="450" data-bonus="10">Huge (1d10, 450 units, +10 base bonus)</option>
-                    <option value="1d12" data-units="800" data-bonus="12">Gargantuan (1d12, 800 units, +12 base bonus)</option>
-                </select>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Mass Combat</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="calculator.html">Mass Combat Calculator</a>
+                    </li>
+                </ul>
             </div>
-            <div class="input-group">
-                <label for="battalion-type">Select Battalion Type:</label>
-                <select id="battalion-type">
-                    <option value="30">Infantry (30 gp/unit)</option>
-                    <option value="45">Archers (45 gp/unit)</option>
-                    <option value="60">Cavalry (60 gp/unit)</option>
-                    <option value="90">Aerial (90 gp/unit)</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="equipment">Select Equipment:</label>
-                <select id="equipment">
-                    <option value="-3">Unarmed (-3 gp/unit, -1 bonus)</option>
-                    <option value="0">Light (0 gp/unit, 0 bonus)</option>
-                    <option value="5">Moderate (+5 gp/unit, +1 bonus)</option>
-                    <option value="15">Heavy (+15 gp/unit, +2 bonus)</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="experience">Select Experience:</label>
-                <select id="experience">
-                    <option value="0">Green (0 gp/unit, 0 bonus)</option>
-                    <option value="2">Trained (+2 gp/unit, +1 bonus)</option>
-                    <option value="5">Seasoned (+5 gp/unit, +2 bonus)</option>
-                    <option value="10">Veteran (+10 gp/unit, +3 bonus)</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="ancestry">Select Ancestry:</label>
-                <select id="ancestry">
-                    <option value="Mixed" data-trait="+1 Tactics against other Ancestries" data-power="0" data-tactics="0" data-toughness="0" data-morale="0" data-cost="0">Mixed (0 gp/unit)</option>
-                    <option value="Human" data-trait="+1 Morale" data-power="0" data-tactics="0" data-toughness="0" data-morale="1" data-cost="0">Human (0 gp/unit)</option>
-                    <option value="Elf" data-trait="+2 Tactics for Elf Archers" data-power="0" data-tactics="0" data-toughness="0" data-morale="0" data-cost="0">Elf (0 gp/unit)</option>
-                    <option value="Giant" data-trait="+2 Power" data-power="2" data-tactics="0" data-toughness="0" data-morale="0" data-cost="5">Giant (+5 gp/unit)</option>
-                    <option value="Dwarf" data-trait="+1 Toughness, +1 Tactics against Orcs" data-power="0" data-tactics="0" data-toughness="1" data-morale="0" data-cost="0">Dwarf (0 gp/unit)</option>
-                    <option value="Orc" data-trait="+1 Power, +1 Tactics against Dwarves" data-power="1" data-tactics="0" data-toughness="0" data-morale="0" data-cost="0">Orc (0 gp/unit)</option>
-                </select>
-            </div>
-            <button onclick="calculateBattalionUpkeep()">Calculate Upkeep</button>
-            <div class="output" id="battalion-output"></div>
         </div>
+    </nav>
 
-        <!-- Settlement Calculator -->
-        <div class="section" id="settlement-calculator">
-            <h2>Settlement Income Calculator</h2>
-            <div class="input-group">
-                <label for="settlement-population">Population:</label>
-                <input type="number" id="settlement-population" value="1000">
-            </div>
-            <div class="input-group">
-                <label for="tax-rate">Tax Rate (copper/year per citizen):</label>
-                <input type="number" id="tax-rate" value="364">
-            </div>
-            <button onclick="calculateSettlementIncome()">Calculate Income</button>
-            <div class="output" id="settlement-output"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to Mass Combat</h1>
+            <p>Calculator and Ruleset by Quade Cunningham</p>
+            <a href="calculator.html" class="btn btn-primary btn-lg">Go to Mass Combat Calculator</a>
         </div>
-    </div>
-    <script>
-        // Update the number of units based on battalion size selection
-        function updateUnitCount() {
-            const sizeSelect = document.getElementById("battalion-size");
-            const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
-            const unitCount = selectedOption.getAttribute("data-units");
-            return parseInt(unitCount, 10);
-        }
+    </section>
 
-        // Battalion Calculator Logic
-        function calculateBattalionUpkeep() {
-            const sizeElement = document.getElementById("battalion-size");
-            const sizeDie = sizeElement.value;
-            const numUnits = updateUnitCount();
-            const baseBonus = parseInt(sizeElement.options[sizeElement.selectedIndex].getAttribute("data-bonus"), 10);
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Mass Combat. All Rights Reserved.</p>
+    </footer>
 
-            const typeElement = document.getElementById("battalion-type");
-            const type = typeElement.options[typeElement.selectedIndex].text;
-            const unitCost = parseInt(typeElement.value, 10);
-
-            const equipmentElement = document.getElementById("equipment");
-            const equipment = equipmentElement.options[equipmentElement.selectedIndex].text;
-            const equipmentCost = parseInt(equipmentElement.value, 10);
-            const equipmentBonus = equipmentElement.selectedIndex - 1; // Unarmed starts at -1
-
-            const experienceElement = document.getElementById("experience");
-            const experience = experienceElement.options[experienceElement.selectedIndex].text;
-            const experienceCost = parseInt(experienceElement.value, 10);
-            const experienceBonus = experienceElement.selectedIndex;
-
-            const ancestryElement = document.getElementById("ancestry");
-            const ancestry = ancestryElement.options[ancestryElement.selectedIndex].text;
-            const ancestryCost = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-cost"), 10);
-            const ancestryPower = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-power"), 10);
-            const ancestryTactics = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-tactics"), 10);
-            const ancestryToughness = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-toughness"), 10);
-            const ancestryMorale = parseInt(ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-morale"), 10);
-            const ancestryTrait = ancestryElement.options[ancestryElement.selectedIndex].getAttribute("data-trait");
-
-            if (isNaN(numUnits) || isNaN(unitCost) || isNaN(equipmentCost) || isNaN(experienceCost)) {
-                document.getElementById("battalion-output").textContent = "Please enter valid inputs.";
-                return;
-            }
-
-            const totalCostPerUnit = unitCost + equipmentCost + experienceCost + ancestryCost;
-            const upkeep = totalCostPerUnit * numUnits;
-
-            const tacticsBonus = baseBonus + experienceBonus + ancestryTactics;
-            const powerBonus = baseBonus + equipmentBonus + ancestryPower;
-            const toughnessBonus = baseBonus + equipmentBonus + ancestryToughness;
-            const moraleBonus = baseBonus + ancestryMorale + experienceBonus;
-
-            const output = 
-Size: ${sizeDie} (${numUnits} units)
-Equipment: ${equipment}
-Experience: ${experience}
-Ancestry: ${ancestry}
-Type: ${type}
-Cost: ${upkeep} gp; Size Die: ${sizeDie}, ${numUnits} units
-Tactics: +${tacticsBonus}; Power: +${powerBonus}; Toughness: ${toughnessBonus + 10}
-Morale: +${moraleBonus}; Victories: 0; Defeats: 0
-Ancestry Traits: ${ancestryTrait}
-;
-
-            document.getElementById("battalion-output").textContent = output;
-        }
-
-        // Settlement Calculator Logic
-        function calculateSettlementIncome() {
-            const population = parseInt(document.getElementById("settlement-population").value, 10);
-            const taxRate = parseFloat(document.getElementById("tax-rate").value);
-
-            if (isNaN(population) || isNaN(taxRate)) {
-                document.getElementById("settlement-output").textContent = "Please enter valid numbers.";
-                return;
-            }
-
-            const income = (population * taxRate) / 100;
-            document.getElementById("settlement-output").textContent = Annual Taxed Income: ${income.toFixed(2)} gp.;
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
